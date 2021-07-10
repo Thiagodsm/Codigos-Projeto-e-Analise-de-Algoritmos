@@ -1,0 +1,66 @@
+#include <bits/stdc++.h> 
+#include <utility>
+using namespace std; 
+ 
+const int MAXX = 10000, INF = 1e9; 
+ 
+// lista de adjacencia(grafo) 
+vector<vector<pair<int, int> > > 
+    adj(MAXX * 10 + 3); 
+// menores distancias
+vector<int> dist(MAXX * 10 + 3, INF); 
+ 
+int par(int x){ 
+    return x * 10 + 2; 
+} 
+ 
+int impar(int x){ 
+    return x * 10 + 1; 
+} 
+ 
+void addAresta(int a, int b, int custo){ 
+    adj[par(a)].push_back({impar(b), custo}); 
+    adj[impar(a)].push_back({par(b), custo}); 
+    adj[impar(b)].push_back({par(a), custo}); 
+    adj[par(b)].push_back({impar(a), custo}); 
+} 
+ 
+int dijkstra(int origem, int destino){
+    priority_queue<pair<int, int>,vector<pair<int, int> >, greater<pair<int, int> > > pq; // fila de prioridade/min-heap
+    pq.push({0, par(origem)}); 
+    dist[par(origem)] = 0; 
+ 
+    
+    while (!pq.empty()){ 
+        int u = pq.top().second; 
+        pq.pop();
+        for(int i =0; i < adj[u].size(); i++){
+            int v = adj[u][i].first; // vizinho de u
+            int c = adj[u][i].second; // custo da aresta (u,v)
+            if ((dist[u] + c) < dist[v]) {  // verifica se e o menor caminho
+                dist[v] = dist[u] + c; // atualiza a distancia
+                pq.push({dist[v], v}); 
+            }
+        }
+    } 
+    return dist[par(destino)]; // retorna a menor distancia cuja a qtd de arestas e par
+} 
+ 
+int main(){ 
+    int N, M, u, v, d, i; 
+    cin >> N >> M;
+    for(i = 0; i < M; i++){
+        cin >> u >> v >> d;
+        addAresta(u, v, d);
+    }
+    int origem = 1; 
+    int destino = N; 
+    int resposta = dijkstra(origem, destino); 
+ 
+    if (resposta == INF) 
+        cout << "-1"
+            << "\n"; 
+    else
+        cout << resposta << "\n"; 
+    return 0; 
+} 

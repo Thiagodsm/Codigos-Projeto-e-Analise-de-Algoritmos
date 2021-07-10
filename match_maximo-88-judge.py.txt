@@ -1,0 +1,42 @@
+class GFG: 
+    def __init__(self,grafo): 
+        self.grafo = grafo 
+        self.ppl = len(grafo) 
+        self.jobs = len(grafo[0]) 
+ 
+    def bpm(self, u, matchR, vistos): 
+        for v in range(self.jobs): 
+            if self.grafo[u][v] and vistos[v] == False: 
+                vistos[v] = True
+ 
+                if matchR[v] == -1 or self.bpm(matchR[v], matchR, vistos): 
+                    matchR[v] = u 
+                    return True
+        return False
+ 
+    def maxBPM(self): 
+        matchR = [-1] * self.jobs 
+        resultado = 0
+        for i in range(self.ppl): 
+            vistos = [False] * self.jobs 
+            if self.bpm(i, matchR, vistos): 
+                resultado += 1
+        return resultado 
+ 
+def ler_entrada():
+    N, M, L = map(int, input().split())
+    maximo = max(N, M)
+    m = [[0]*maximo for j in range(maximo)]
+    #print(m)
+ 
+    for i in range(0, L):
+        c, b = map(int, input().split())
+        m[c][b] = 1
+        if(b < N and N < M):
+            m[b][c] = 1      
+    #print(m)
+    return m
+ 
+grafo = ler_entrada()
+g = GFG(grafo) 
+print (g.maxBPM()) 

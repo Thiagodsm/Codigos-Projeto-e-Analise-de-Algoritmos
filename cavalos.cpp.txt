@@ -1,0 +1,137 @@
+#include<iostream>
+#include<string>
+#include<utility>
+#include<queue>
+#include<sstream>
+#define TAMANHO 89
+ 
+using namespace std;
+ 
+int EscolheCaracter(char letra){
+  switch (letra){
+  case 'a':
+    return 1;
+  case 'b':
+    return 2;
+  case 'c':
+    return 3;
+  case 'd':
+    return 4;
+  case 'e':
+    return 5;
+  case 'f':
+    return 6;
+  case 'g':
+    return 7;
+  case 'h':
+    return 8;
+ 
+  default:
+    break;
+  }
+}
+ 
+ 
+int MovimentoDoCavalo(int x, int y){
+  int linha = y % 10;
+  int coluna = y / 10;
+ 
+  if(x == 0 && linha <= 6 && coluna >= 2)
+    return(y - 10 + 2);
+ 
+  else if (x == 1 &&  linha <= 6 && coluna <= 7)
+    return (y + 10 + 2);
+ 
+  else if(x == 2 && linha >= 3 && coluna >= 2)
+    return (y - 10 - 2);
+ 
+  else if(x == 3 && linha >= 3 && coluna <= 7)
+    return(y + 10 - 2);
+  
+  else if(x == 4 && linha <= 7 && coluna >= 3)
+    return(y - 20 + 1);
+ 
+  else if(x == 5 && linha <= 7 && coluna <= 6)
+    return(y + 20 + 1);
+ 
+  else if(x == 6 && linha >= 2 && coluna >= 3)
+    return(y - 20 - 1);
+ 
+  else if(x == 7 && linha >= 2 && coluna <= 6)
+    return(y + 20 - 1);
+  else
+    return -1;  
+}
+ 
+int BuscaEmLargura(int origem, int destino, int *lista, int *marcado){
+ 
+  queue<int> fila;
+  int i, y, vizinho;
+  marcado[origem] = 1;
+  fila.push(origem);
+  lista[origem] = 0;
+ 
+  while(!fila.empty()){
+    y = fila.front();
+    fila.pop();
+ 
+    for(i = 0; i < 8; ++i){
+      vizinho = MovimentoDoCavalo(i, y);
+ 
+      if(vizinho != -1 && !marcado[vizinho]){
+        marcado[vizinho] = 1;
+        fila.push(vizinho);
+        lista[vizinho] = lista[y] + 1;
+ 
+        if(vizinho == destino)
+          return (lista[vizinho]);
+      }
+    }
+  }
+}
+ 
+int main(){
+  char caracterOrigem, caracterDestino;
+  int i, numOrigem, numDestino, linhaOrigem, linhaDestino, colunaOrigem, colunaDestino;
+  int marcado[TAMANHO], lista[TAMANHO];
+ 
+  for(i = 0; i < TAMANHO; i++){
+    marcado[i] = 0;
+    lista[i] = -1;
+  }
+ 
+  cin >> caracterOrigem;
+  cin >> numOrigem;
+  cin >> caracterDestino;
+  cin >> numDestino;
+ 
+  linhaOrigem = numOrigem;
+  colunaOrigem = EscolheCaracter(caracterOrigem);
+  //cout << colunaOrigem << endl;
+  //cout << "linha de origem: " << linhaOrigem << "\n"  << "coluna de origem: " << colunaOrigem << endl;
+ 
+  linhaDestino = numDestino;
+  colunaDestino = EscolheCaracter(caracterDestino);
+  //cout << "linha de destino: " << linhaDestino << "\n"  << "coluna de destino: " << colunaDestino << endl;
+  //cout << colunaDestino << endl;
+ 
+ 
+  ostringstream auxOrigem;
+  auxOrigem << colunaOrigem << linhaOrigem;
+  istringstream ehOrigem(auxOrigem.str());
+  int origem;
+  ehOrigem >> origem;
+  //cout << "origem: " << origem << endl;
+ 
+  ostringstream auxDestino;
+  auxDestino << colunaDestino << linhaDestino;
+  istringstream ehDestino(auxDestino.str());
+  int destino;
+  ehDestino >> destino;
+  //cout << "destino: " << destino << endl;
+ 
+  int solucao = BuscaEmLargura(origem, destino, lista, marcado);
+  cout << solucao << endl;
+ 
+  return 0;
+}
