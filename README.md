@@ -3,7 +3,7 @@ Codigos implementados na UC (Unidade Curricular) Projeto e Analise de Algoritmos
 
 Esta UC apresenta técnicas de construção de algoritmos, prova de corretude, cálculo de complexidade. Além de classes de problemas intratáveis na exatidão
 
-Principais tópicos que foram abordados durante:
+Principais tópicos que foram abordados durante o curso:
 
 - Análise de assintótica: Comportamento Assintótico; Notação Assintótica; Notações Padrões 
 
